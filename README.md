@@ -16,6 +16,11 @@ Copy and configure the config.js file, then run `node index.js -h` for more info
 node index.js -r vast -o output.json -p pi_mapping.json
 ```
 
+```bash
+#Cron example:
+00 2 * * * /usr/bin/node /home/ubuntu/xdmod-starfish-importer/index.js -v -r vast -o /home/ubuntu/output/$(date +'\%m-\%d-\%Y').json >> /var/log/starfish.log 2>&1
+```
+
 ## Caveats
 
 Quota information, ie: `soft_threshold & hard_threshold`, must come from your storage platform. Currently Vast is supported natively, other platforms can be added with respect to the required fields:
