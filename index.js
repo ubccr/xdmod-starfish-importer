@@ -72,35 +72,37 @@ const main = async () => {
       }
     })
   }
-  return starfish_res.map((val) => {
-    let pi_map = pi_res.find((p) => {
-      return p.users.find((u) => {
-        let output = u === val.username
-        if (output === false && args.verbose >= 2) console.log("PI not found for user: ", val.username)
-        return output
-      })
-    }) ?? {
-      pi: "unknown",
-    } // assumes 1 pi per user, may need to change to a find all
-    let storage_map = storage_quotas.find((s) => s.user === val.username && s.path.match(val.volume)) ?? {
-      soft_limit: 0,
-      hard_limit: 0,
-      used_effective_capacity: 0,
-    }
+  return starfish_res
+    .filter((val) => !config.BLOCKED_USERNAMES.includes(val.username))
+    .map((val) => {
+      let pi_map = pi_res.find((p) => {
+        return p.users.find((u) => {
+          let output = u === val.username
+          // if (output === false && args.verbose >= 2) console.log("PI not found for user: ", val.username)
+          return output
+        })
+      }) ?? {
+        pi: val.username,
+      } // assumes 1 pi per user, may need to change to a find all, defaults to the user being the PI
+      let storage_map = storage_quotas.find((s) => s.user === val.username && s.path.match(val.volume)) ?? {
+        soft_limit: 0,
+        hard_limit: 0,
+        used_effective_capacity: 0,
+      }
 
-    return {
-      resource: args.resource ?? "nfs",
-      mountpoint: `/${val.volume}`,
-      user: val.username ?? "unknown",
-      pi: pi_map.pi,
-      dt: currentDate,
-      soft_threshold: storage_map.soft_limit,
-      hard_threshold: storage_map.hard_limit,
-      file_count: val.count,
-      logical_usage: val.size_sum,
-      physical_usage: storage_map.used_effective_capacity,
-    }
-  })
+      return {
+        resource: args.resource ?? "nfs",
+        mountpoint: `/${val.volume}`,
+        user: val.username ?? "unknown",
+        pi: pi_map.pi,
+        dt: currentDate,
+        soft_threshold: storage_map.soft_limit,
+        hard_threshold: storage_map.hard_limit,
+        file_count: val.count,
+        logical_usage: val.size_sum,
+        physical_usage: storage_map.used_effective_capacity,
+      }
+    })
 }
 
 const storage = async () => {

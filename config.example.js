@@ -1,4 +1,20 @@
 const config = {
+  // General config:
+  BLOCKED_USERNAMES: [
+    "_apt",
+    "root",
+    "tcpdump",
+    "uuidd",
+    "syslog",
+    "systemd-resolve",
+    "systemd-network",
+    "nobody",
+    "www-data",
+    "man",
+    "pcpsync",
+    "daemon",
+  ],
+
   // Starfish config:
   STARFISH_URL: "",
   STARFISH_TOKEN: "",
