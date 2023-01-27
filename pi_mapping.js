@@ -34,7 +34,7 @@ try {
       .map((val) => {
         let new_PI = PI_mapping.find((pi) => {
           return pi.users.find((u) => u === val.user)
-        }) ?? { pi: val.user }
+        }) ?? { pi: config.DEFAULT_PI === undefined ? val.user : config.DEFAULT_PI }
         if (!config.BLOCKED_USERNAMES.includes(val.user)) return { ...val, pi: new_PI.pi }
       })
       .filter(Boolean)

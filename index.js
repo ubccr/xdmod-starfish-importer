@@ -81,9 +81,7 @@ const main = async () => {
           // if (output === false && args.verbose >= 2) console.log("PI not found for user: ", val.username)
           return output
         })
-      }) ?? {
-        pi: val.username,
-      } // assumes 1 pi per user, may need to change to a find all, defaults to the user being the PI
+      }) ?? { pi: config.DEFAULT_PI === undefined ? val.username : config.DEFAULT_PI } // assumes 1 pi per user, may need to change to a find all, defaults to the user being the PI
       let storage_map = storage_quotas.find((s) => s.user === val.username && s.path.match(val.volume)) ?? {
         soft_limit: 0,
         hard_limit: 0,

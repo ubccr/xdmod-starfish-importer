@@ -14,6 +14,7 @@ const config = {
     "pcpsync",
     "daemon",
   ],
+  DEFAULT_PI: "none", // set to undefined to consider all users not mapped to a PI as a PI
 
   // Starfish config:
   STARFISH_URL: "",
