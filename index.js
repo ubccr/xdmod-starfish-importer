@@ -49,7 +49,7 @@ const args = yargs(hideBin(process.argv))
   .alias("help", "h").argv
 
 const main = async () => {
-  if (args.verbose >= 2) console.log("Starting script... \n Arguments:", args)
+  if (args.verbose >= 1) console.log("Starting script... \n Arguments:", args)
 
   let currentDate = new Date().toISOString().split(".")[0] + "Z"
 
@@ -78,7 +78,7 @@ const main = async () => {
       let pi_map = pi_res.find((p) => {
         return p.users.find((u) => {
           let output = u === val.username
-          // if (output === false && args.verbose >= 2) console.log("PI not found for user: ", val.username)
+          if (output === false && args.verbose >= 3) console.log("PI not found for user: ", val.username)
           return output
         })
       }) ?? { pi: config.DEFAULT_PI === undefined ? val.username : config.DEFAULT_PI } // assumes 1 pi per user, may need to change to a find all, defaults to the user being the PI
@@ -87,12 +87,13 @@ const main = async () => {
         hard_limit: 0,
         used_effective_capacity: 0,
       }
+      if (val.username === undefined && args.verbose >= 1) console.log("Username is undefined for: ", val)
 
       return {
         resource: args.resource ?? "nfs",
         mountpoint: `/${val.volume}`,
         user: val.username ?? "unknown",
-        pi: pi_map.pi,
+        pi: pi_map.pi ?? "unknown",
         dt: currentDate,
         soft_threshold: storage_map.soft_limit,
         hard_threshold: storage_map.hard_limit,
