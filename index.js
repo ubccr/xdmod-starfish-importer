@@ -41,6 +41,10 @@ const args = yargs(hideBin(process.argv))
     description: "Specify an output file",
     type: "string",
   })
+  .option("debug", {
+    description: "Specify a directory to output all api query data",
+    type: "string",
+  })
   .count("verbose")
   .alias("v", "verbose")
   .usage("Usage: $0 [options]")
@@ -57,6 +61,24 @@ const main = async () => {
   let user_map = (await quota_mapping()) ?? []
   let starfish_res = await starfish()
   let pi_res = (await pi_mapping()) ?? []
+
+  if (args.debug !== undefined) {
+    // Debug function to generate static json files for quick code testing
+    try {
+      let storage_data = new Uint8Array(Buffer.from(JSON.stringify(storage_res, null, 4)))
+      await writeFile(`${args.debug}/storage.json`, storage_data)
+
+      let user_data = new Uint8Array(Buffer.from(JSON.stringify(user_map, null, 4)))
+      await writeFile(`${args.debug}/quota_starfish.json`, user_data)
+
+      let starfish_data = new Uint8Array(Buffer.from(JSON.stringify(starfish_res, null, 4)))
+      await writeFile(`${args.debug}/starfish.json`, starfish_data)
+
+      if (args.verbose >= 1) console.log(`Successfully sent debug data to: ${args.debug}\n\n`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   // function to map storage paths to their owner
   let storage_quotas = []
