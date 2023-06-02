@@ -5,6 +5,8 @@ import configparser
 from datetime import datetime
 import argparse
 import xml.etree.ElementTree as E
+import urllib3
+urllib3.disable_warnings()
 
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "coldfront.config.settings")
