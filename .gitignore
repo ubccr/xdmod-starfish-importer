@@ -1,8 +1,2 @@
-node_modules
-*.env
-test
-config.js
-.vscode
-*json
-output
+config.ini
 debug
